@@ -1,0 +1,88 @@
+<div class="reply-item">
+  <div class="comment-avatar">
+    <img src="/user-profil-male.jpg" alt="User avatar">
+  </div>
+  <div class="comment-content">
+    @if (isAddingNewReply) {
+      <div class="reply-input-container">
+        <form [formGroup]="replyForm" (ngSubmit)="onSubmit()">
+          <textarea
+            #replyInput
+            formControlName="content"
+            placeholder="Write a reply..."
+            class="reply-input"
+            [class.disabled]="isCheckingSpam || isPosting"
+            (blur)="onBlur()"
+          ></textarea>
+
+          @if (replyForm.get('content')?.hasError('required') && replyForm.get('content')?.touched) {
+            <div class="error-message">Reply text is required</div>
+          }
+
+          @if (replyForm.get('content')?.hasError('maxlength')) {
+            <div class="error-message">Reply cannot exceed 500 characters</div>
+          }
+
+          @if (replyForm.get('content')?.hasError('serverError')) {
+            <div class="error-message">{{ replyForm.get('content')?.getError('serverError') }}</div>
+          }
+
+          <div class="reply-actions">
+            <button type="button" class="cancel-btn" (click)="cancelReply()">Cancel</button>
+            <button
+              type="submit"
+              class="comment-submit-btn"
+              [disabled]="replyForm.invalid || isPosting || isCheckingSpam"
+            >
+              @if (isCheckingSpam) {
+                <span class="spinner-text">Checking content...</span>
+              } @else if (isPosting) {
+                <span>Posting...</span>
+              } @else {
+                <span>Reply</span>
+              }
+            </button>
+          </div>
+        </form>
+      </div>
+    }
+    @else if (editingReplyId === reply?.id) {
+      <textarea
+        [(ngModel)]="editedContent"
+        class="edit-reply-textarea"
+      ></textarea>
+      <div class="edit-actions">
+        <button (click)="cancelEdit()" class="cancel-btn">Cancel</button>
+        <button (click)="saveEdit()" class="save-btn">Save</button>
+      </div>
+    }
+    @else if (reply) {
+      <div class="comment-header">
+        <span class="comment-author">{{ reply.user.email || 'Anonymous' }}</span>
+        <div class="time">
+          <span class="comment-time">{{ reply.createdAt | date:'dd.MM.yyyy HH:mm' }}</span>
+        </div>
+        @if (currUserEmail === reply.user.email) {
+          <span class="spacer"></span>
+          <button mat-icon-button [matMenuTriggerFor]="menu" class="comment-menu-btn">
+            <mat-icon>more_horiz</mat-icon>
+          </button>
+
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="editReply()">
+              <mat-icon>edit</mat-icon>
+              <span>Edit</span>
+            </button>
+            <button mat-menu-item (click)="deleteReply()">
+              <mat-icon>delete</mat-icon>
+              <span>Delete</span>
+            </button>
+          </mat-menu>
+        }
+      </div>
+      <div class="comment-text">
+        <p>{{ reply.content }}</p>
+      </div>
+    }
+  </div>
+</div>

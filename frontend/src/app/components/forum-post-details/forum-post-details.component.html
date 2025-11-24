@@ -1,0 +1,59 @@
+<div id="forum">
+  <app-sidebar></app-sidebar>
+  <div class="center-content">
+    @if (post$ | async; as post) {
+      <div class="forum-post">
+        <div class="post-header">
+          <div class="post-meta">
+            <span class="post-author">{{ post.user.email }}</span>
+            <div class="time">
+              <span class="post-time">{{ post.createdAt | date: 'dd.MM.yyyy' }}</span>
+              <span class="post-time">{{ post.createdAt | date:'HH:mm' }}</span>
+            </div>
+          </div>
+
+          <div class="disease-tags">
+            @for (disease of post.diseases; track disease.id) {
+              <span class="disease-tag">{{ disease.name }}</span>
+            }
+            @if (currUserId === post.user.id) {
+              <button mat-icon-button [matMenuTriggerFor]="menu" class="post-menu-btn">
+                <mat-icon>more_horiz</mat-icon>
+              </button>
+            }
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="editPost(post.id)">
+                <mat-icon>edit</mat-icon>
+                <span>Edit</span>
+              </button>
+              <button mat-menu-item (click)="deletePost(post.id)">
+                <mat-icon>delete</mat-icon>
+                <span>Delete</span>
+              </button>
+            </mat-menu>
+          </div>
+
+        </div>
+        <div class="post-content">
+          <h2 class="post-title">{{ post.title }}</h2>
+          <div class="post-body">
+            <p>{{ post.content }}</p>
+          </div>
+        </div>
+
+        <div class="post-footer">
+          <div class="post-actions">
+            <app-post-like [postId]="post.id"></app-post-like>
+            <button class="action-button"><span class="action-icon">💬</span> Comment</button>
+          </div>
+          <div class="post-stats">
+          </div>
+        </div>
+
+      </div>
+    }
+    <app-comment-section></app-comment-section>
+  </div>
+  <app-user-posts></app-user-posts>
+</div>
+<router-outlet></router-outlet>

@@ -1,0 +1,145 @@
+<div class="comments-section">
+  <div class="comments-header">
+    <h3>Comments ({{ (comments$ | async)?.length || 0 }})</h3>
+    <button type="button" class="toggle-comments-btn">
+      <mat-icon>expand_less</mat-icon>
+    </button>
+  </div>
+
+  <div class="new-comment">
+    <div class="comment-avatar">
+      <img src="/user-profil-male.jpg" alt="User avatar">
+    </div>
+    <div class="comment-input-container">
+      <form [formGroup]="commentForm" (ngSubmit)="onSubmit()">
+        <textarea
+          #commentInput
+          formControlName="content"
+          placeholder="Write a comment..."
+          class="comment-input"
+          [class.disabled]="isCheckingSpam || isPosted"
+        ></textarea>
+
+        @if (commentForm.get('content')?.hasError('required') && commentForm.get('content')?.touched) {
+          <div class="error-message">Comment text is required</div>
+        }
+
+        @if (commentForm.get('content')?.hasError('maxlength')) {
+          <div class="error-message">Comment cannot exceed 1000 characters</div>
+        }
+
+        @if (commentForm.get('content')?.hasError('serverError')) {
+          <div class="error-message">{{ commentForm.get('content')?.getError('serverError') }}</div>
+        }
+
+        <div class="comment-actions">
+          <button
+            type="submit"
+            class="comment-submit-btn"
+            [disabled]="commentForm.invalid || isPosted || isCheckingSpam"
+          >
+            @if (isCheckingSpam) {
+              <span class="spinner-text">Checking content...</span>
+            } @else if (isPosted) {
+              <span>Posting...</span>
+            } @else {
+              <span>Post</span>
+            }
+          </button>
+        </div>
+      </form>
+      <div class="moderation-info">
+        <small>All comments are reviewed for community guidelines compliance.</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="comments-list">
+    @for (comment of comments$ | async; track comment.id) {
+      <div class="comment-item">
+        <div class="comment-avatar">
+          <img src="/user-profil-male.jpg" alt="User avatar">
+        </div>
+        <div class="comment-content">
+          <div class="comment-header">
+            <span class="comment-author">{{ comment.user.email || 'Anonymous' }}</span>
+            <div class="time">
+              <span class="comment-time">{{ comment.createdAt | date:'dd.MM.yyyy HH:mm' }}</span>
+            </div>
+            @if (currUserEmail === comment.user.email) {
+              <span class="spacer"></span>
+              <button mat-icon-button [matMenuTriggerFor]="menu" class="comment-menu-btn">
+                <mat-icon>more_horiz</mat-icon>
+              </button>
+
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="editComment(comment)">
+                  <mat-icon>edit</mat-icon>
+                  <span>Edit</span>
+                </button>
+                <button mat-menu-item (click)="deleteComment(comment.id)">
+                  <mat-icon>delete</mat-icon>
+                  <span>Delete</span>
+                </button>
+              </mat-menu>
+            }
+          </div>
+
+          @if (editingCommentId === comment.id) {
+            <textarea
+              [(ngModel)]="editedContent"
+              class="edit-comment-textarea"
+            ></textarea>
+            <div class="edit-actions">
+              <button (click)="cancelEdit()" class="cancel-btn">Cancel</button>
+              <button (click)="saveEdit(comment)" class="save-btn">Save</button>
+            </div>
+          } @else {
+            <div class="comment-text">
+              <p>{{ comment.content }}</p>
+            </div>
+            <div class="comment-footer">
+              <button type="button" class="comment-action-btn" (click)="toggleReply(comment)">Reply</button>
+              @if (comment.replies?.length) {
+                <button type="button" class="comment-action-btn" (click)="toggleReplies(comment)">
+                  {{ comment.showReplies ? 'Hide' : 'Show' }}
+                  {{comment.replies?.length}} {{ comment.replies?.length === 1 ? 'reply' : 'replies' }}
+                </button>
+              }
+            </div>
+
+            @if (comment.isReplyingTo) {
+              <div class="comment-replies">
+                <app-reply
+                  [commentId]="comment.id"
+                  [postTitle]="postTitle"
+                  [isAddingNewReply]="true"
+                  (replyAdded)="onReplyAdded(comment)"
+                  (replyCancelled)="cancelReply(comment)"
+                ></app-reply>
+              </div>
+            }
+
+            @if (comment.showReplies && comment.replies && comment.replies.length > 0) {
+              <div class="comment-replies">
+                @for (reply of comment.replies; track reply.id) {
+                  <app-reply
+                    [reply]="reply"
+                    [commentId]="comment.id"
+                    [postTitle]="postTitle"
+                    (replyUpdated)="onReplyUpdated(comment)"
+                    (replyDeleted)="onReplyDeleted(comment, $event)"
+                  ></app-reply>
+                }
+              </div>
+            }
+          }
+        </div>
+      </div>
+    } @empty {
+      <div class="no-comments">
+        <p>No comments yet. Be the first to comment!</p>
+      </div>
+    }
+  </div>
+</div>

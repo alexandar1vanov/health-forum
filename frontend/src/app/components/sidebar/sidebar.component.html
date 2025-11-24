@@ -1,0 +1,53 @@
+<div class="sidebar">
+  <div class="sidebar-header">
+    <img src="/health-forum-logo.png" alt="Health Forum Logo" class="logo">
+    <h2>Health Forum</h2>
+  </div>
+
+  <div class="user-profile">
+    <div class="user-avatar">
+      <img src="/user-profil-male.jpg" alt="User Avatar">
+    </div>
+    <div class="user-info">
+      <p class="user-name">{{ userEmail }}</p>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <ul>
+      <li>
+        <a [routerLink]="['/home']" routerLinkActive="active" class="nav-link">
+          <span class="nav-icon">🏠</span>
+          <span class="nav-text">Home</span>
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="['/create-forum']" routerLinkActive="active" class="nav-link">
+          <span class="nav-icon">📝</span>
+          <span class="nav-text">Create Post</span>
+        </a>
+      </li>
+      @for (disease of diseasesByUser; track disease.id) {
+        <li>
+          <a [routerLink]="['/diseasePosts', disease.id]" routerLinkActive="active" class="nav-link">
+            <span class="nav-icon">🩺</span>
+            <span class="nav-text">{{ disease.name }}</span>
+          </a>
+        </li>
+      }
+    </ul>
+  </nav>
+
+  <div class="sidebar-footer">
+    @if (authService.isAdmin()){
+    <a [routerLink]="['/admin-panel']" routerLinkActive="active" class="footer-link">
+      <span class="footer-icon">😎</span>
+      <span>Admin Panel</span>
+    </a>
+    }
+    <a (click)="logout()" class="footer-link" style="cursor: pointer;">
+      <span class="footer-icon">🚪</span>
+      <span>Logout</span>
+    </a>
+  </div>
+</div>

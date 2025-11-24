@@ -1,0 +1,122 @@
+<div class="forum">
+  <app-sidebar></app-sidebar>
+  <div class="admin-container">
+    @if (editingUser) {
+      <div class="edit-modal">
+        <app-user-update
+          [user]="editingUser"
+          (save)="updateUser($event)"
+          (cancel)="cancelEdit()"
+        ></app-user-update>
+      </div>
+    }
+    @else {
+      <h2 class="panel-title">User Management</h2>
+      <div class="search-container">
+        <form (submit)="searchUser(searchInput.value); $event.preventDefault()">
+          <input
+            #searchInput
+            type="text"
+            placeholder="Search by email..."
+            class="search-input"
+          >
+          <button type="submit" class="btn-search">Search</button>
+          <button
+            type="button"
+            class="btn-clear"
+            (click)="loadUsers(); searchInput.value = ''"
+            [disabled]="isLoading"
+          >
+            Clear
+          </button>
+        </form>
+      </div>
+
+      @if (errorMessage) {
+        <div class="alert alert-danger">
+          {{ errorMessage }}
+        </div>
+      }
+
+      @if (isLoading) {
+        <div class="loading-spinner">
+          Loading users...
+        </div>
+      } @else {
+        <div class="user-table-container">
+          <table class="user-table">
+            <thead>
+            <tr>
+              <th>ID</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Has Selected Disease</th>
+              <th>Registered At</th>
+              <th>Delete</th>
+              <th>Edit</th>
+            </tr>
+            </thead>
+            <tbody>
+              @if (searchedUser) {
+                <tr>
+                  <td>{{ searchedUser.id }}</td>
+                  <td>{{ searchedUser.email }}</td>
+                  <td>{{ searchedUser.role }}</td>
+                  <td>
+                    {{ searchedUser.hasSelectedDiseases ? 'Yes' : 'No' }}
+                  </td>
+                  <td>{{ searchedUser.createdAt | date:'medium' }}</td>
+                  <td>
+                    <button
+                      (click)="searchedUser.id && deleteUser(searchedUser.id)"
+                      class="btn-delete"
+                      [disabled]="!searchedUser.id"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                  <td>
+                    <button (click)="startEdit(searchedUser)" class="btn-edit">
+                      Edit
+                    </button>
+                  </td>
+                </tr>
+              } @else {
+                @for (user of users; track user.id) {
+                  <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.role }}</td>
+                    <td>
+                      {{ user.hasSelectedDiseases ? 'Yes' : 'No' }}
+                    </td>
+                    <td>{{ user.createdAt | date:'medium' }}</td>
+                    <td>
+                      <button
+                        (click)="user.id && deleteUser(user.id)"
+                        class="btn-delete"
+                        [disabled]="!user.id"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                    <td>
+                      <button (click)="startEdit(user)" class="btn-edit">
+                        Edit
+                      </button>
+                    </td>
+                  </tr>
+                }
+              }
+            </tbody>
+          </table>
+
+          @if (users.length === 0 && !searchedUser && !isLoading) {
+            <div class="no-users">No users found</div>
+          }
+        </div>
+      }
+    }
+  </div>
+  <app-user-posts></app-user-posts>
+</div>

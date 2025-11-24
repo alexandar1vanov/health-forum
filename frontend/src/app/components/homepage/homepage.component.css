@@ -1,0 +1,40 @@
+#forum {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr 1fr;
+}
+
+app-sidebar {
+  grid-column-start: 1;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.center-content {
+  grid-column-start: 2;
+  z-index: 20;
+}
+
+app-user-posts {
+  grid-column-start: 3;
+  position: fixed;
+  top: 0;
+  right: 0;
+}
+
+@media (max-width: 768px) {
+  #forum {
+    display: flex;
+    flex-direction: column;
+  }
+
+  app-sidebar,
+  app-user-posts {
+    position: relative;
+    width: 100%;
+  }
+
+  .center-content {
+    margin-top: 20px;
+  }
+}

@@ -1,0 +1,73 @@
+<div class="container">
+  <h1 class="disease-title">Select Your Diseases</h1>
+  <div class="search-container">
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      (input)="onSearchInput()"
+      placeholder="Search diseases..."
+      class="search-input"
+    >
+  </div>
+  @if (isLoading) {
+    <div class="loading-indicator">Loading diseases...</div>
+  } @else if (errorMessage) {
+    <div class="error-message">{{ errorMessage }}</div>
+  } @else if (filteredDiseases.length > 0) {
+    <ul class="disease-list">
+      @for (disease of filteredDiseases; track disease.id) {
+        <li class="disease-item">
+          <label>
+            <input
+              type="checkbox"
+              [checked]="userDiseaseService.isSelected(disease.id)"
+              (change)="toggleDisease(disease.id)"
+              id="disease-{{ disease.id }}"
+            >
+            {{ disease.name }} ({{ disease.category }})
+          </label>
+          <small>{{ disease.description }}</small>
+        </li>
+      }
+    </ul>
+  } @else {
+    <div class="no-results">
+      @if (searchTerm) {
+        No diseases found matching "{{ searchTerm }}"
+      } @else {
+        No diseases available.
+      }
+    </div>
+  }
+  <div class="button-group">
+    @if (userDiseaseService.hasSelectedDiseases()) {
+      <button
+        (click)="clearAllSelections()"
+        class="clear-button"
+      >
+        Clear All
+      </button>
+    }
+    <button
+      (click)="saveSelection()"
+      [disabled]="isLoading || !userDiseaseService.hasSelectedDiseases()"
+      class="save-button"
+    >
+      @if (!isLoading) {
+        <span>Save Selected</span>
+      } @else {
+        <span>Saving...</span>
+      }
+    </button>
+  </div>
+  @if (saveSuccessful) {
+    <div class="popup-overlay">
+      <div class="popup-content">
+        <div class="popup-icon">✓</div>
+        <h2>Success!</h2>
+        <p>Your disease selections have been saved successfully.</p>
+        <p class="redirect-message">Redirecting to home page...</p>
+      </div>
+    </div>
+  }
+</div>

@@ -1,0 +1,9 @@
+<button
+  class="like-button"
+  [class.liked]="isLiked"
+  (click)="toggleLike()"
+  [disabled]="!isLoggedIn">
+  <mat-icon>{{ isLiked ? 'favorite' : 'favorite_border' }}</mat-icon>
+  <span>{{ likeCount }}</span>
+</button>
+

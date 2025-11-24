@@ -1,0 +1,65 @@
+<div class="container">
+  <div class="form-container">
+    <h1 class="signup-title">Sign Up</h1>
+    <p class="subtitle">Join our Health-Forum community today!</p>
+    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          placeholder="Enter your email">
+        @if (signupForm.get('email')?.invalid && (signupForm.get('email')?.dirty || signupForm.get('email')?.touched)) {
+          <small class="error-text">
+            @if (signupForm.get('email')?.errors?.['required']) {
+              Email is required
+            }
+            @if (signupForm.get('email')?.errors?.['email']) {
+              Please enter a valid email
+            }
+          </small>
+        }
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          formControlName="password"
+          placeholder="Create a password">
+        @if (signupForm.get('password')?.invalid && (signupForm.get('password')?.dirty || signupForm.get('password')?.touched)) {
+          <small class="error-text">
+            @if (signupForm.get('password')?.errors?.['required']) {
+              Password is required
+            }
+            @if (signupForm.get('password')?.errors?.['minlength']) {
+              Password must be at least 8 characters
+            }
+            @if (signupForm.get('password')?.errors?.['pattern']) {
+              Password must contain at least one uppercase letter and no spaces
+            }
+          </small>
+        }
+      </div>
+      <button
+        type="submit"
+        class="btn-signup"
+        [disabled]="signupForm.invalid || isLoading">
+        @if (!isLoading) {
+          Create Account
+        } @else {
+          Creating account...
+        }
+      </button>
+      @if (errorMessage) {
+        <div class="error-message">
+          <p>{{ errorMessage }}</p>
+        </div>
+      }
+    </form>
+    <div class="login-link">
+      Already have an account? <a routerLink="/login" routerLinkActive="active">Log in</a>
+    </div>
+  </div>
+</div>

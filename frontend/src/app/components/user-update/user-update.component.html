@@ -1,0 +1,56 @@
+<div class="edit-form-container">
+  <h2 class="form-title">Update User Information</h2>
+
+  <form [formGroup]="editForm" (ngSubmit)="onSave()">
+    <div class="form-group">
+      <label for="email" class="form-label">Email address</label>
+      <input
+        type="email"
+        id="email"
+        formControlName="email"
+        class="form-input"
+        [class.input-error]="hasError('email')"
+      >
+      @if (hasError('email')) {
+        <div class="error-message">
+          <span class="error-icon">!</span>
+          @if (emailControl?.errors?.['required']) {
+            <span>Email address is required</span>
+          }
+          @if (emailControl?.errors?.['email']) {
+            <span>Please enter a valid email address</span>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="role" class="form-label">Role</label>
+      <select
+        id="role"
+        formControlName="role"
+        class="form-select"
+        [class.input-error]="hasError('role')"
+      >
+        <option value="" disabled>Select a role</option>
+        <option value="USER">User</option>
+        <option value="ADMIN">Admin</option>
+      </select>
+      @if (hasError('role')) {
+        <div class="error-message">
+          <span class="error-icon">!</span>
+          <span>Please select a user role</span>
+        </div>
+      }
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn btn-secondary" (click)="onCancel()">
+        Cancel
+      </button>
+      <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid">
+        Save changes
+      </button>
+    </div>
+  </form>
+</div>

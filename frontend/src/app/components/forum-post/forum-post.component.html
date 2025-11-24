@@ -1,0 +1,145 @@
+<div class="search-container">
+  <input type="text"
+         placeholder="Search by content..."
+         #searchInput
+         (keyup.enter)="searchPosts(searchInput.value)"
+  >
+  <button class="search-button" (click)="searchPosts(searchInput.value)">
+    Search
+  </button>
+  @if (hasSearched) {
+    <button class="clear-button" (click)="clearSearch()">
+      Clear
+    </button>
+  }
+</div>
+
+@if (!hasSearched) {
+  @if (posts$ | async; as posts) {
+    @for (post of posts; track post.id) {
+      <div class="forum-post">
+
+        <div class="post-header">
+          <div class="post-meta">
+            <span class="post-author">{{ post.user.email }}</span>
+            <div class="time">
+              <span class="post-time">{{ post.createdAt | date: 'dd.MM.yyyy' }}</span>
+              <span class="post-time">{{ post.createdAt | date:'HH:mm' }}</span>
+            </div>
+          </div>
+
+          <div class="disease-tags">
+            @for (disease of post.diseases; track disease.id) {
+              <span class="disease-tag">{{ disease.name }}</span>
+            }
+            @if (currUserId === post.user.id) {
+              <button mat-icon-button [matMenuTriggerFor]="menu" class="post-menu-btn">
+                <mat-icon>more_horiz</mat-icon>
+              </button>
+            }
+          </div>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="editPost(post.id)">
+              <mat-icon>edit</mat-icon>
+              <span>Edit</span>
+            </button>
+            <button mat-menu-item (click)="deletePost(post.id)">
+              <mat-icon>delete</mat-icon>
+              <span>Delete</span>
+            </button>
+          </mat-menu>
+
+        </div>
+        <div class="post-content">
+          <a [routerLink]="['/post', post.id]" routerLinkActive="active" class="post-link">
+            <h2 class="post-title">{{ post.title }}</h2>
+            <div class="post-body">
+              <p>{{ post.content }}</p>
+            </div>
+          </a>
+        </div>
+        <div class="post-footer">
+          <div class="post-actions">
+            <app-post-like [postId]="post.id"></app-post-like>
+            <button [routerLink]="['/post', post.id]" routerLinkActive="active" class="action-button">
+              <span class="action-icon">💬</span>
+              Comment
+            </button>
+          </div>
+          <div class="post-stats">
+            <span class="stat">
+              {{ commentCounts[post.id] ? (commentCounts[post.id] | async) : 0 }} Comments
+            </span>
+
+          </div>
+        </div>
+      </div>
+    } @empty {
+      <p class="no-posts">No posts available.</p>
+    }
+  }
+} @else {
+  <h2>Search Results</h2>
+
+  @if (searchResults && searchResults.length > 0) {
+    @for (post of searchResults; track post.id) {
+      <div class="forum-post">
+        <div class="post-header">
+          <div class="post-meta">
+            <span class="post-author">{{ post.user.email }}</span>
+            <div class="time">
+              <span class="post-time">{{ post.createdAt | date: 'dd.MM.yyyy' }}</span>
+              <span class="post-time">{{ post.createdAt | date:'HH:mm' }}</span>
+            </div>
+          </div>
+
+          <div class="disease-tags">
+            @for (disease of post.diseases; track disease.id) {
+              <span class="disease-tag">{{ disease.name }}</span>
+            }
+            @if (currUserId === post.user.id) {
+              <button mat-icon-button [matMenuTriggerFor]="menu" class="post-menu-btn">
+                <mat-icon>more_horiz</mat-icon>
+              </button>
+            }
+          </div>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="editPost(post.id)">
+              <mat-icon>edit</mat-icon>
+              <span>Edit</span>
+            </button>
+            <button mat-menu-item (click)="deletePost(post.id)">
+              <mat-icon>delete</mat-icon>
+              <span>Delete</span>
+            </button>
+          </mat-menu>
+
+        </div>
+        <div class="post-content">
+          <a [routerLink]="['/post', post.id]" routerLinkActive="active" class="post-link">
+            <h2 class="post-title">{{ post.title }}</h2>
+            <div class="post-body">
+              <p>{{ post.content }}</p>
+            </div>
+          </a>
+        </div>
+        <div class="post-footer">
+          <div class="post-actions">
+            <app-post-like [postId]="post.id"></app-post-like>
+            <button [routerLink]="['/post', post.id]" routerLinkActive="active" class="action-button">
+              <span class="action-icon">💬</span>
+              Comment
+            </button>
+          </div>
+          <div class="post-stats">
+            <span class="stat">
+              {{ commentCounts[post.id] ? (commentCounts[post.id] | async) : 0 }} Comments
+            </span>
+          </div>
+        </div>
+      </div>
+    }
+  } @else {
+    <p class="no-results">No posts found matching your search criteria.</p>
+  }
+}

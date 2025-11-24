@@ -1,0 +1,16 @@
+package com.sorsix.healthforum.model.enumerations
+
+enum class DiseaseCategory {
+    INFECTIOUS_RESPIRATORY,
+    INFECTIOUS_GASTROINTESTINAL,
+    INFECTIOUS_OTHER,
+    CARDIOVASCULAR,
+    METABOLIC,
+    CHRONIC_RESPIRATORY,
+    MUSCULOSKELETAL,
+    MENTAL_HEALTH,
+    NEUROLOGICAL,
+    CANCER,
+    AUTOIMMUNE,
+    ALLERGY,
+}

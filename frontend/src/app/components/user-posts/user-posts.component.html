@@ -1,0 +1,24 @@
+
+<div class="sidebar">
+  <div class="sidebar-header">
+    <h2>Your Posts History</h2>
+  </div>
+
+  <nav class="sidebar-nav">
+    @if (userPosts$ | async; as forumPosts) {
+    <ul>
+      @for (userPost of forumPosts; track userPost.id) {
+        <li>
+          <a [routerLink]="['/userPost', userPost.id]" routerLinkActive="active" class="nav-link">
+            <span class="nav-icon">📄</span>
+            <span class="nav-text">{{userPost.title}}</span>
+          </a>
+        </li>
+      }
+    </ul>
+    }
+  </nav>
+
+  <div class="sidebar-footer">
+  </div>
+</div>

@@ -1,0 +1,128 @@
+<div class="create-forum-container">
+  <h2 class="page-title">What's on Your Mind?</h2>
+
+  @if (errorMessage) {
+    <div class="error-message alert alert-danger">
+      {{ errorMessage }}
+    </div>
+  }
+
+  <form [formGroup]="createForumPostForm" (ngSubmit)="onSubmit()" class="forum-form">
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input
+        type="text"
+        id="title"
+        formControlName="title"
+        placeholder="Enter a descriptive title"
+        class="form-control"
+      >
+      @if (titleControl?.touched && titleControl?.invalid) {
+        <div class="validation-error text-danger">
+          @if (titleControl?.errors?.['required']) {
+            <div>Title is required.</div>
+          }
+          @if (titleControl?.errors?.['minlength']) {
+            <div>Title must be at least 5 characters.</div>
+          }
+          @if (titleControl?.errors?.['maxlength']) {
+            <div>Title must not exceed 30 characters.</div>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="content">Content</label>
+      <textarea
+        id="content"
+        formControlName="content"
+        placeholder="Share your thoughts, questions or experiences..."
+        rows="8"
+        class="form-control"
+      ></textarea>
+      @if (contentControl?.touched && contentControl?.invalid) {
+        <div class="validation-error text-danger">
+          @if (contentControl?.errors?.['required']) {
+            <div>Content is required.</div>
+          }
+          @if (contentControl?.errors?.['maxlength']) {
+            <div>Content must not exceed 1000 characters.</div>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="form-group">
+      <label>Relevant Diseases</label>
+      <div class="disease-search mb-3">
+        <input
+          type="text"
+          placeholder="Search for diseases..."
+          [(ngModel)]="searchTerm"
+          (ngModelChange)="filterDiseases()"
+          [ngModelOptions]="{standalone: true}"
+          class="form-control search-input"
+        >
+      </div>
+
+      @if (selectedDiseaseIds.length > 0) {
+        <div class="selected-diseases mb-3">
+          <h4>Selected Diseases:</h4>
+          <div class="disease-selection">
+            @for (diseaseId of selectedDiseaseIds; track diseaseId) {
+              <div
+                class="disease-tag selected"
+                (click)="toggleDiseaseSelection(diseaseId)"
+              >
+                {{ getDiseaseNameById(diseaseId) }}
+                <span class="remove-tag">×</span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      <div class="disease-selection">
+        @for (disease of filteredDiseases; track disease.id) {
+          <div
+            class="disease-tag"
+            [class.selected]="isDiseaseSelected(disease.id)"
+            (click)="toggleDiseaseSelection(disease.id)"
+          >
+            {{ disease.name }}
+          </div>
+        }
+      </div>
+
+      @if (filteredDiseases.length === 0 && searchTerm) {
+        <div class="no-diseases text-muted">
+          No diseases found matching "{{ searchTerm }}".
+        </div>
+      }
+
+      @if (allDiseases.length === 0 && !errorMessage) {
+        <div class="no-diseases text-muted">
+          Loading diseases...
+        </div>
+      }
+    </div>
+
+    <div class="form-actions mt-4">
+      <button
+        type="button"
+        class="btn btn-outline-secondary cancel-button ms-2"
+        [routerLink]="['/home']"
+      >
+        Cancel
+      </button>
+      <button
+        type="submit"
+        class="btn btn-primary submit-button"
+        [disabled]="isSubmitted"
+      >
+        {{ isSubmitted ? 'Creating...' : 'Create Post' }}
+      </button>
+    </div>
+  </form>
+</div>
