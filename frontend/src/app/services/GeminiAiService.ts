@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
-import {GenerativeModel, GoogleGenerativeAI} from '@google/generative-ai';
 import {catchError, from, map, Observable, of} from 'rxjs';
+import {GoogleGenAI} from '@google/genai';
+import {envirnment} from '../../environments/environment';
 
 export interface ContentReviewResult {
   isSpam: boolean;
@@ -13,16 +14,13 @@ export interface ContentReviewResult {
 })
 export class GeminiAiService {
 
-  private generativeAI: GoogleGenerativeAI;
-  private model: GenerativeModel;
-
+  private client: any;
+  private modelName: string = 'gemini-3-flash-preview';
   private forumContext: string = 'health forum';
 
   constructor() {
-    this.generativeAI = new GoogleGenerativeAI('AIzaSyCIj0_si7vgAiRxECiOZf0TzHbSMccUxTA');
-
-    this.model = this.generativeAI.getGenerativeModel({
-      model: 'gemini-1.5-flash'
+    this.client = new GoogleGenAI({
+      apiKey: envirnment.geminiApiKey
     });
   }
 
@@ -42,7 +40,7 @@ export class GeminiAiService {
 
   detectSpam(text: string): Observable<boolean> {
     return this.reviewContent(text).pipe(
-      map(result => result.isSpam)
+      map(response => response.isSpam)
     );
   }
 
@@ -92,8 +90,11 @@ export class GeminiAiService {
         CRITICAL: Any post with offensive language in EITHER title or content MUST have isSpam = true
       `;
 
-      const result = await this.model.generateContent(prompt);
-      const responseText = result.response.text().trim();
+      const response = await this.client.models.generateContent({
+        model: this.modelName,
+        contents: [{ role: 'user', parts: [{ text: `${this.forumContext}: ${prompt}` }] }]
+      });
+      const responseText = response.text.trim();
       console.log('Raw Gemini response:', responseText);
 
       try {
