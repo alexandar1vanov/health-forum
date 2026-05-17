@@ -1,4 +1,4 @@
 //create your own api key at Google AI studio and place it here
-export const envirnment = {
+export const environment = {
   geminiApiKey: 'ne-mozhe :)'
 }

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {catchError, from, map, Observable, of} from 'rxjs';
 import {GoogleGenAI} from '@google/genai';
-import {envirnment} from '../../environments/environment';
+import {environment} from '../../environments/environment';
 
 export interface ContentReviewResult {
   isSpam: boolean;
@@ -20,7 +20,7 @@ export class GeminiAiService {
 
   constructor() {
     this.client = new GoogleGenAI({
-      apiKey: envirnment.geminiApiKey
+      apiKey: environment.geminiApiKey
     });
   }
 

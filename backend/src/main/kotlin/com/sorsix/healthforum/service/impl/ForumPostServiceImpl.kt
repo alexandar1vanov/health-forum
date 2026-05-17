@@ -28,18 +28,12 @@ class ForumPostServiceImpl(
         return forumPostRepository.findAllPosts()
     }
 
-    override fun getByTitle(title: String): MutableList<ForumPost> {
-        val postsWithTitle = forumPostRepository.findByPostTitle(title)
-        return postsWithTitle
-    }
+    override fun getByTitle(title: String): MutableList<ForumPost> = forumPostRepository.findByPostTitle(title)
 
-    override fun getByForumPostId(id: Long): ForumPost? {
-        return forumPostRepository.findById(id).orElseThrow { ForumNotFoundException.byId(id.toString()) }
-    }
+    override fun getByForumPostId(id: Long): ForumPost? = forumPostRepository.findById(id)
+        .orElseThrow { ForumNotFoundException.byId(id.toString()) }
 
-    override fun getByUserId(userId: Long): List<ForumPost> {
-        return forumPostRepository.findByUserId(userId)
-    }
+    override fun getByUserId(userId: Long): List<ForumPost> = forumPostRepository.findByUserId(userId)
 
     @Transactional
     override fun savePost(createForumRequest: CreateForumRequest): ForumPost {
@@ -75,9 +69,7 @@ class ForumPostServiceImpl(
         forumPostRepository.deleteById(id)
     }
 
-    private fun deleteAllLikesForForumPost(postId: Long) {
-        postLikeRepository.deleteByPostId(postId)
-    }
+    private fun deleteAllLikesForForumPost(postId: Long) = postLikeRepository.deleteByPostId(postId)
 
     override fun findPostsByContent(content: String): List<ForumPost> {
         return forumPostRepository.findByPostContent(content)
