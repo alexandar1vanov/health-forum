@@ -51,6 +51,7 @@ jobs:
           SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/health-forum
           SPRING_DATASOURCE_USERNAME: postgres
           SPRING_DATASOURCE_PASSWORD: postgres
+          HEALTH_FORUM_JWT_SECRET: test-secret-key-for-ci-only
         run: ./gradlew test --no-daemon
 
   # ── 2. Build & Push Backend Image ───────────────────────────────────────
