@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+  namespace: health-forum
+data:
+  SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-service:5432/health-forum
+  SPRING_DATASOURCE_USERNAME: postgres
+  SPRING_JPA_HIBERNATE_DDL_AUTO: update
+  SERVER_PORT: "8080"
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: backend-secret
+  namespace: health-forum
+type: Opaque
+data:
+  SPRING_DATASOURCE_PASSWORD: cG9zdGdyZXM=
+  HEALTH_FORUM_JWT_SECRET: test-secret-key
