@@ -18,7 +18,7 @@ RUN rm /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy built Angular app (adjust 'health-forum' to your actual dist folder name)
-COPY --from=builder /app/dist/health-forum/browser /usr/share/nginx/html
+COPY --from=builder /app/dist/health-forum-ng/browser /usr/share/nginx/html
 
 EXPOSE 80
 
