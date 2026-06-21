@@ -1,6 +1,6 @@
 package com.sorsix.healthforum.controller
 
-import com.sorsix.healthforum.model.dto.post_like_dtos.PostLikeCountDTO
+import com.sorsix.healthforum.model.dto.response.PostLikeCountDTO
 import com.sorsix.healthforum.service.PostLikeService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

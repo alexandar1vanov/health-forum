@@ -1,5 +1,5 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {Disease} from '../../models/Disease';
+import {DiseaseResponse} from '../../models/DiseaseResponse';
 import {AuthService} from '../../services/AuthService';
 import {Router} from '@angular/router';
 import {FormsModule} from '@angular/forms';
@@ -19,8 +19,8 @@ export class SelectDiseasesComponent implements OnInit, OnDestroy {
   private readonly authService = inject(AuthService)
   private readonly router = inject(Router)
 
-  diseases: Disease[] = []
-  filteredDiseases: Disease[] = []
+  diseases: DiseaseResponse[] = []
+  filteredDiseases: DiseaseResponse[] = []
   searchTerm: string = '';
 
   isLoading: boolean = false

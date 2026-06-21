@@ -1,7 +1,7 @@
-import {Component, ElementRef, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, DestroyRef, ElementRef, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ForumPostService} from '../../services/forum-post.service';
 import {catchError, map, Observable, of, Subject, switchMap, takeUntil, tap} from 'rxjs';
-import {ForumPost} from '../../models/ForumPost';
+import {ForumPostResponse} from '../../models/ForumPostResponse';
 import {AsyncPipe, DatePipe} from '@angular/common';
 import {ActivatedRoute, Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {MatMenuModule} from '@angular/material/menu';
@@ -12,6 +12,13 @@ import {EditPostDialogComponent} from '../edit-post-dialog/edit-post-dialog.comp
 import {MatDialog} from '@angular/material/dialog';
 import {CommentService} from '../../services/comment.service';
 import {PostLikeComponent} from '../post-like/post-like.component';
+import {PostRatingResponse} from '../../models/PostRatingResponse';
+import {PostRatingService} from '../../services/PostRatingService';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {Rating} from 'primeng/rating';
+import {FormsModule} from '@angular/forms';
+import {PostRatingRequest} from '../../models/PostRatingRequest';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-forum-post',
@@ -23,7 +30,9 @@ import {PostLikeComponent} from '../post-like/post-like.component';
     MatMenuModule,
     MatIconModule,
     MatButtonModule,
-    PostLikeComponent
+    PostLikeComponent,
+    Rating,
+    FormsModule,
   ],
   templateUrl: './forum-post.component.html',
   styleUrl: './forum-post.component.css'
@@ -32,12 +41,15 @@ export class ForumPostComponent implements OnInit, OnDestroy {
   fpService = inject(ForumPostService);
   authService = inject(AuthService);
   commentService = inject(CommentService);
-  posts$?: Observable<ForumPost[]>;
+  posts$?: Observable<ForumPostResponse[]>;
   route = inject(ActivatedRoute);
   router = inject(Router);
   dialog = inject(MatDialog);
+  readonly #postRatingService = inject(PostRatingService);
+  readonly #destroyRef = inject(DestroyRef);
+  readonly #toastrService = inject(ToastrService);
 
-  searchResults: ForumPost[] | null = null;
+  searchResults: ForumPostResponse[] | null = null;
   commentCounts: { [postId: number]: Observable<number> } = {};
 
   hasSearched = false;
@@ -46,10 +58,27 @@ export class ForumPostComponent implements OnInit, OnDestroy {
 
   currUserId: number | null = null;
   private snackBar: any;
+  selectedRatings: PostRatingResponse[] = [];
 
   ngOnInit(): void {
+    this.loadPosts();
+    this.loadRatings();
+  }
+
+  loadRatings(): void {
+    this.#postRatingService.getRatingsByActiveUser().pipe(
+      takeUntilDestroyed(this.#destroyRef)
+    ).subscribe({
+      next: ratings => {
+        console.log("ratings:", ratings)
+        this.selectedRatings = ratings;
+      }
+    })
+  }
+
+  loadPosts(): void {
     this.posts$?.pipe(
-      takeUntil(this.destroy$)
+      takeUntilDestroyed(this.#destroyRef)
     ).subscribe(posts => {
       if (posts) {
         posts.forEach(post => {
@@ -58,10 +87,43 @@ export class ForumPostComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.currUserId = this.authService.getLoggedInUserId();
     this.fetchPostsByDisease();
   }
 
+  getRating(postId: number): number {
+    return this.selectedRatings.find(r => r.postId === postId)?.rating ?? 0;
+  }
+
+  submitRating(postId: number, rating: number): void {
+    if (!rating) {
+      this.#postRatingService.deleteRating(postId).pipe(
+        takeUntilDestroyed(this.#destroyRef)
+      ).subscribe({
+        next: () => {
+          this.#toastrService.success("Successfully removed rating!");
+        },
+        error: (error) => {
+          this.#toastrService.error("Error while removing rating!",error);
+        }
+      })
+      return;
+    }
+
+    const postRatingRequest: PostRatingRequest = {
+      postId: postId,
+      rating: rating
+    };
+    this.#postRatingService.submitRating(postRatingRequest).pipe(
+      takeUntilDestroyed(this.#destroyRef)
+    ).subscribe({
+      next: () => {
+        this.#toastrService.success("Successfully submitted rating!");
+      },
+      error: (error) => {
+        this.#toastrService.error(error);
+      }
+    })
+  }
 
   ngOnDestroy(): void {
     this.destroy$.next();
@@ -150,14 +212,14 @@ export class ForumPostComponent implements OnInit, OnDestroy {
     this.fpService.getPostById(postId).pipe(
       catchError(error => {
         console.error('Error fetching post:', error);
-        this.snackBar.open('Could not load post for editing', 'Close', { duration: 3000 });
+        this.snackBar.open('Could not load post for editing', 'Close', {duration: 3000});
         return of(null);
       })
     ).subscribe(post => {
       if (!post) return;
       const dialogRef = this.dialog.open(EditPostDialogComponent, {
         width: '600px',
-        data: { post }
+        data: {post}
       });
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
@@ -167,7 +229,7 @@ export class ForumPostComponent implements OnInit, OnDestroy {
           }).pipe(
             catchError(error => {
               console.error('Error updating post:', error);
-              this.snackBar.open('Failed to update post', 'Close', { duration: 5000 });
+              this.snackBar.open('Failed to update post', 'Close', {duration: 5000});
               return of(null);
             })
           ).subscribe(updatedPost => {
@@ -178,7 +240,7 @@ export class ForumPostComponent implements OnInit, OnDestroy {
                 return posts.map(p => p.id === postId ? updatedPost : p);
               })
             );
-            this.snackBar.open('Post updated successfully', 'Close', { duration: 5000 });
+            this.snackBar.open('Post updated successfully', 'Close', {duration: 5000});
           });
         }
       });

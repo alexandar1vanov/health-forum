@@ -1,9 +1,9 @@
 package com.sorsix.healthforum.controller
 
 import com.sorsix.healthforum.model.Reply
-import com.sorsix.healthforum.model.dto.reply_dtos.ReplyDTO
-import com.sorsix.healthforum.model.dto.requests_dtos.replies.CreateReplyRequest
-import com.sorsix.healthforum.model.dto.requests_dtos.replies.UpdateReplyRequest
+import com.sorsix.healthforum.model.dto.response.ReplyDTO
+import com.sorsix.healthforum.model.dto.request.CreateReplyRequest
+import com.sorsix.healthforum.model.dto.request.UpdateReplyRequest
 import com.sorsix.healthforum.service.ReplyService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

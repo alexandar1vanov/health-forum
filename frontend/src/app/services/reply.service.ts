@@ -9,7 +9,7 @@ import {CreateReply} from '../models/CreateReply';
   providedIn: 'root'
 })
 export class ReplyService{
-  private readonly url='http://localhost:8080/api/reply';
+  private readonly url='/api/reply';
   http = inject(HttpClient);
   authService = inject(AuthService);
 

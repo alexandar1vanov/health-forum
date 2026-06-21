@@ -1,12 +1,12 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Disease} from '../models/Disease';
+import {DiseaseResponse} from '../models/DiseaseResponse';
 @Injectable({
   providedIn: 'root',
 })
 export class UserDiseaseService{
-  private readonly saveUserDiseaseUrl = 'http://localhost:8080/api/user-diseases';
-  private readonly userDiseasesUrl = 'http://localhost:8080/api/user-diseases/user'
+  private readonly saveUserDiseaseUrl = '/api/user-diseases';
+  private readonly userDiseasesUrl = '/api/user-diseases/user'
 
   http = inject(HttpClient);
   private selectedDiseases: number[] = [];
@@ -38,7 +38,7 @@ export class UserDiseaseService{
   }
 
   getUserDiseases(userId: number) {
-    return this.http.get<Disease[]>(`${this.userDiseasesUrl}/${userId}`)
+    return this.http.get<DiseaseResponse[]>(`${this.userDiseasesUrl}/${userId}`)
   }
 
 }

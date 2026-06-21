@@ -1,6 +1,6 @@
 package com.sorsix.healthforum.controller
 
-import com.sorsix.healthforum.model.dto.auth_dtos.SignUpDTO
+import com.sorsix.healthforum.model.dto.response.SignUpDTO
 import com.sorsix.healthforum.service.UserService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
@@ -14,7 +14,7 @@ class UserController(
     val userService: UserService
 ) {
 
-    @PostMapping("/signup")
+    @PostMapping("/api/signup")
     fun signUp(@RequestBody @Valid signUpDTO: SignUpDTO): ResponseEntity<String> {
         try {
             userService.signUpUser(signUpDTO)

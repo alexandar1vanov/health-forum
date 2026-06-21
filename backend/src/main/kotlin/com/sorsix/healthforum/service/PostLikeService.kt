@@ -1,8 +1,8 @@
 package com.sorsix.healthforum.service
 
 import com.sorsix.healthforum.model.PostLike
-import com.sorsix.healthforum.model.dto.post_like_dtos.PostLikeCountDTO
-import com.sorsix.healthforum.model.dto.post_like_dtos.PostLikeDTO
+import com.sorsix.healthforum.model.dto.response.PostLikeCountDTO
+import com.sorsix.healthforum.model.dto.response.PostLikeDTO
 
 interface PostLikeService {
 

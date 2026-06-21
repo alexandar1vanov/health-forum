@@ -1,16 +1,19 @@
 package com.sorsix.healthforum.service
 
 import com.sorsix.healthforum.model.ForumPost
-import com.sorsix.healthforum.model.dto.requests_dtos.forums.CreateForumRequest
-import com.sorsix.healthforum.model.dto.requests_dtos.forums.UpdateForumRequest
+import com.sorsix.healthforum.model.dto.response.ForumPostDTO
+import com.sorsix.healthforum.model.dto.request.CreateForumRequest
+import com.sorsix.healthforum.model.dto.request.UpdateForumRequest
 
 interface ForumPostService {
 
-    fun getAllForumPosts(): List<ForumPost>
+    fun getAllForumPosts(): List<ForumPostDTO>
 
     fun getByTitle(title: String): MutableList<ForumPost>
 
     fun getByForumPostId(id: Long): ForumPost?
+
+    fun getById(id: Long): ForumPostDTO?
 
     fun getByUserId(userId: Long): List<ForumPost>
 
@@ -18,9 +21,9 @@ interface ForumPostService {
 
     fun deletePost(id: Long)
 
-    fun findPostsByContent(content: String): List<ForumPost>
+    fun findPostsByContent(content: String): List<ForumPostDTO>
 
-    fun getAllPostByDiseaseId(id: Long): List<ForumPost>
+    fun getAllPostByDiseaseId(id: Long): List<ForumPostDTO>
 
     fun updatePost(id: Long, updateForumRequest: UpdateForumRequest): ForumPost
 

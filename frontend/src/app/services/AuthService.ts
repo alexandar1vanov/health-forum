@@ -11,7 +11,7 @@ import { UserDiseaseService } from './UserDiseaseService';
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly url = 'http://localhost:8080';
+  private readonly url = '/api';
   http = inject(HttpClient);
   private userDiseaseService = inject(UserDiseaseService);
 

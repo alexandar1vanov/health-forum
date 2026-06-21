@@ -1,17 +1,17 @@
 package com.sorsix.healthforum.service.impl
 
 import com.sorsix.healthforum.model.Reply
-import com.sorsix.healthforum.model.dto.reply_dtos.ReplyDTO
-import com.sorsix.healthforum.model.dto.requests_dtos.replies.CreateReplyRequest
-import com.sorsix.healthforum.model.dto.requests_dtos.replies.UpdateReplyRequest
+import com.sorsix.healthforum.model.dto.response.ReplyDTO
+import com.sorsix.healthforum.model.dto.request.CreateReplyRequest
+import com.sorsix.healthforum.model.dto.request.UpdateReplyRequest
 import com.sorsix.healthforum.model.exceptions.ReplyNotFoundException
+import com.sorsix.healthforum.model.extensions.toReplyDTO
 import com.sorsix.healthforum.repository.ReplyRepository
 import com.sorsix.healthforum.service.CommentService
 import com.sorsix.healthforum.service.ReplyService
 import com.sorsix.healthforum.service.UserService
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
-import toReplyDTO
 
 @Service
 class ReplyServiceImpl(

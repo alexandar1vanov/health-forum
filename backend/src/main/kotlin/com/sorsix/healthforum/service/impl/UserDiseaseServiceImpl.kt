@@ -1,9 +1,9 @@
 package com.sorsix.healthforum.service.impl
 
 import com.sorsix.healthforum.model.UserDisease
-import com.sorsix.healthforum.model.dto.user_disease_dtos.UserDiseaseDetailsDTO
-import com.sorsix.healthforum.model.dto.disease_dtos.DiseasesDTO
-import com.sorsix.healthforum.model.dto.users_dtos.UsersDTO
+import com.sorsix.healthforum.model.dto.response.UserDiseaseDetailsDTO
+import com.sorsix.healthforum.model.dto.response.DiseasesDTO
+import com.sorsix.healthforum.model.dto.response.UsersDTO
 import com.sorsix.healthforum.model.exceptions.UserDiseaseAssociationNotFoundException
 import com.sorsix.healthforum.model.exceptions.UserDiseaseNotFoundException
 import com.sorsix.healthforum.repository.UserDiseaseRepository
@@ -37,6 +37,7 @@ class UserDiseaseServiceImpl(
         return userDiseaseRepository.findByDiseaseId(diseaseId)
             .map { userDisease ->
                 UsersDTO(
+                    id = userDisease.user?.id,
                     email = userDisease.user?.email!!,
                 )
             }

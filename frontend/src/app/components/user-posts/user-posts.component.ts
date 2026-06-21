@@ -2,7 +2,7 @@ import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {RouterLink, RouterLinkActive} from "@angular/router";
 import {ForumPostService} from '../../services/forum-post.service';
 import {Observable, startWith, Subject, switchMap, takeUntil} from 'rxjs';
-import {ForumPost} from '../../models/ForumPost';
+import {ForumPostResponse} from '../../models/ForumPostResponse';
 import {AuthService} from '../../services/AuthService';
 import {AsyncPipe} from '@angular/common';
 
@@ -19,7 +19,7 @@ import {AsyncPipe} from '@angular/common';
 export class UserPostsComponent implements OnInit, OnDestroy {
   fpService = inject(ForumPostService);
   authService = inject(AuthService);
-  userPosts$?: Observable<ForumPost[]>;
+  userPosts$?: Observable<ForumPostResponse[]>;
 
   private destroy$ = new Subject<void>();
 

@@ -1,8 +1,8 @@
 package com.sorsix.healthforum.controller
 
 import com.sorsix.healthforum.model.User
-import com.sorsix.healthforum.model.dto.admin_dtos.AdminUserUpdateDTO
-import com.sorsix.healthforum.model.dto.users_dtos.UserPanelDTO
+import com.sorsix.healthforum.model.dto.request.AdminUserUpdateDTO
+import com.sorsix.healthforum.model.dto.response.UserPanelDTO
 import com.sorsix.healthforum.service.UserService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus

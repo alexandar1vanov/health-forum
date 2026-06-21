@@ -11,7 +11,7 @@ export interface LikeResponse {
   providedIn: 'root'
 })
 export class PostLikeService {
-  private baseUrl = 'http://localhost:8080/api/posts';
+  private baseUrl = '/api/posts';
 
   constructor(private http: HttpClient) {}
 

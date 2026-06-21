@@ -1,11 +1,11 @@
 import {User} from './User';
-import {ForumPost} from './ForumPost';
+import {ForumPostResponse} from './ForumPostResponse';
 import {Reply} from './Reply';
 
 export interface Comment {
   id: number;
   user: User
-  forumPost: ForumPost
+  forumPost: ForumPostResponse
   content: string
   createdAt: Date
   updatedAt: Date

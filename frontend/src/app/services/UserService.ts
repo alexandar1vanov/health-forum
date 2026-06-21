@@ -8,7 +8,7 @@ import {Role} from '../models/enums/Role';
   providedIn: 'root',
 })
 export class UserService {
-  private readonly apiUserUrl = 'http://localhost:8080/api/admin'
+  private readonly apiUserUrl = '/api/admin'
 
   http = inject(HttpClient)
 
