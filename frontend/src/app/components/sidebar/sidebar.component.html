@@ -5,12 +5,14 @@
   </div>
 
   <div class="user-profile">
-    <div class="user-avatar">
-      <img src="/user-profil-male.jpg" alt="User Avatar">
-    </div>
-    <div class="user-info">
-      <p class="user-name">{{ userEmail }}</p>
-    </div>
+    <a [routerLink]="['/profile']" routerLinkActive="active" class="nav-link">
+      <div class="user-avatar">
+        <img src="/user-profil-male.jpg" alt="User Avatar">
+      </div>
+      <div class="user-info">
+        <p class="user-name">{{ userEmail }}</p>
+      </div>
+    </a>
   </div>
 
   <nav class="sidebar-nav">
@@ -22,10 +24,7 @@
         </a>
       </li>
       <li>
-        <a [routerLink]="['/profile']" routerLinkActive="active" class="nav-link">
-          <span class="nav-icon">👤</span>
-          <span class="nav-text">Profile</span>
-        </a>
+
       </li>
       <li>
         <a [routerLink]="['/create-forum']" routerLinkActive="active" class="nav-link">
@@ -45,11 +44,11 @@
   </nav>
 
   <div class="sidebar-footer">
-    @if (authService.isAdmin()){
-    <a [routerLink]="['/admin-panel']" routerLinkActive="active" class="footer-link">
-      <span class="footer-icon">😎</span>
-      <span>Admin Panel</span>
-    </a>
+    @if (authService.isAdmin()) {
+      <a [routerLink]="['/admin-panel']" routerLinkActive="active" class="footer-link">
+        <span class="footer-icon">😎</span>
+        <span>Admin Panel</span>
+      </a>
     }
     <a (click)="logout()" class="footer-link" style="cursor: pointer;">
       <span class="footer-icon">🚪</span>

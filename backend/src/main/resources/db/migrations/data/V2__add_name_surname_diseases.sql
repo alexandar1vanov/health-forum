@@ -1,0 +1,2 @@
+ALTER TABLE users ADD COLUMN if not exists name VARCHAR(100) NOT NULL DEFAULT '';
+ALTER TABLE users ADD COLUMN if not exists surname VARCHAR(100) NOT NULL DEFAULT '';
