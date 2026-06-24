@@ -1,0 +1,84 @@
+<div id="forum">
+  <app-sidebar></app-sidebar>
+
+  <div class="center-content">
+    @if (isLoading) {
+      <p class="status-text">Loading profile...</p>
+    } @else if (errorMessage && !profile) {
+      <p class="status-text error">{{ errorMessage }}</p>
+    } @else if (profile) {
+      <div class="profile-card">
+        <div class="profile-header">
+          <div class="profile-avatar">
+            <img src="/user-profil-male.jpg" alt="User Avatar">
+          </div>
+          <div class="profile-title">
+            @if (!editMode) {
+              <h2>{{ profile.name }} {{ profile.surname }}</h2>
+              <p class="profile-email">{{ profile.email }}</p>
+            } @else {
+              <div class="edit-fields">
+                <input type="text" [(ngModel)]="editName" placeholder="Name">
+                <input type="text" [(ngModel)]="editSurname" placeholder="Surname">
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="profile-body">
+          <div class="info-row">
+            <span class="info-label">Member since</span>
+            <span class="info-value">{{ profile.createdAt | date:'mediumDate' }}</span>
+          </div>
+
+          <!-- Edit profile actions -->
+          <div class="actions-row">
+            @if (!editMode) {
+              <button class="btn btn-primary" (click)="startEdit()">Edit profile</button>
+            } @else {
+              <button class="btn btn-primary" (click)="saveProfile()">Save</button>
+              <button class="btn btn-ghost" (click)="cancelEdit()">Cancel</button>
+            }
+          </div>
+
+          <!-- Diseases -->
+          <div class="diseases-section">
+            <div class="section-header">
+              <span class="info-label">Diseases</span>
+              <button class="btn btn-small" (click)="toggleAddDisease()">
+                {{ showAddDisease ? 'Close' : '+ Add' }}
+              </button>
+            </div>
+
+            @if (showAddDisease) {
+              <div class="add-disease-row">
+                <select [(ngModel)]="selectedDiseaseId">
+                  <option [ngValue]="null" disabled>Select a disease...</option>
+                  @for (disease of availableDiseases; track disease.id) {
+                    <option [ngValue]="disease.id">{{ disease.name }}</option>
+                  }
+                </select>
+                <button class="btn btn-primary btn-small" (click)="addDisease()" [disabled]="!selectedDiseaseId">
+                  Add
+                </button>
+              </div>
+            }
+
+            @if (userDiseases.length > 0) {
+              <ul class="disease-list">
+                @for (disease of userDiseases; track disease.id) {
+                  <li class="disease-item">
+                    <span>{{ disease.name }}</span>
+                    <button class="btn-delete" (click)="removeDisease(disease.id)" title="Remove">✕</button>
+                  </li>
+                }
+              </ul>
+            } @else {
+              <p class="muted">No diseases selected</p>
+            }
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>

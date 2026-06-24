@@ -1,5 +1,4 @@
 package com.sorsix.healthforum.model
-
 import com.sorsix.healthforum.model.enumerations.Role
 import jakarta.persistence.*
 import jakarta.validation.constraints.*
@@ -21,8 +20,15 @@ data class User(
     @NotBlank(message = "Password is required")
     @Pattern(
         regexp = "^(?=.*[A-Z])(?=\\S+$).{8,}$",
-        message = "Password must be at least 8 characters, contain at least one uppercase letter, and no spaces")
+        message = "Password must be at least 8 characters, contain at least one uppercase letter, and no spaces"
+    )
     var password: String = "",
+
+    @Column(name = "name")
+    var name: String = "",
+
+    @Column(name = "surname")
+    var surname: String = "",
 
     @Enumerated(EnumType.STRING)
     var role: Role = Role.USER,

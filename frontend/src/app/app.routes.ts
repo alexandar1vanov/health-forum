@@ -6,6 +6,7 @@ import {SelectDiseasesComponent} from './components/select-diseases/select-disea
 import {CreateForumComponent} from './components/create-forum/create-forum.component';
 import {ForumPostDetailsComponent} from './components/forum-post-details/forum-post-details.component';
 import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
+import {ProfileComponent} from './components/profile/profile.component';
 import {AuthGuard} from './routes-guard/AuthGuard';
 import {RoleGuard} from './routes-guard/RoleGuard';
 
@@ -22,6 +23,8 @@ export const routes: Routes = [
   {path: 'userPost/:id', component: ForumPostDetailsComponent, canActivate: [AuthGuard]},
 
   {path: 'post/:id', component: ForumPostDetailsComponent, canActivate: [AuthGuard]},
+
+  {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
 
   {path: 'select-diseases', component: SelectDiseasesComponent, canActivate: [AuthGuard]},
 

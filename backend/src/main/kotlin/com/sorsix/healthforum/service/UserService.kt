@@ -3,8 +3,12 @@ package com.sorsix.healthforum.service
 import com.sorsix.healthforum.model.User
 import com.sorsix.healthforum.model.dto.admin_dtos.AdminUserUpdateDTO
 import com.sorsix.healthforum.model.dto.auth_dtos.SignUpDTO
+import com.sorsix.healthforum.model.dto.profile_response_dtos.ProfileResponse
+import com.sorsix.healthforum.model.dto.profile_response_dtos.UpdateProfileRequest
+import com.sorsix.healthforum.model.dto.profile_response_dtos.toProfileResponse
 import com.sorsix.healthforum.model.dto.users_dtos.UserPanelDTO
 import com.sorsix.healthforum.model.exceptions.UserNotFoundException
+import com.sorsix.healthforum.repository.UserDiseaseRepository
 import com.sorsix.healthforum.repository.UserRepository
 import jakarta.transaction.Transactional
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
@@ -16,8 +20,26 @@ import kotlin.jvm.optionals.getOrNull
 @Service
 class UserService(
     private val userRepository: UserRepository,
+    private val userDiseaseRepository: UserDiseaseRepository,
+    private val emailService: EmailService,
     val passwordEncoder: BCryptPasswordEncoder
 ) {
+    fun getProfile(id: Long): ProfileResponse {
+        val user = getUserById(id)
+        val diseases = userDiseaseRepository.findByUserId(id)
+            .mapNotNull { it.disease?.name }
+        return user.toProfileResponse(diseases)
+    }
+
+    @Transactional
+    fun updateProfile(id: Long, request: UpdateProfileRequest): ProfileResponse {
+        val user = getUserById(id)
+        request.name?.let { user.name = it }
+        request.surname?.let { user.surname = it }
+        userRepository.save(user)
+        return getProfile(id)
+    }
+
     fun getUserByEmail(email: String): Optional<User> {
         return userRepository.findByEmail(email)
     }
@@ -44,6 +66,12 @@ class UserService(
             user.email = signUpDTO.email ?: throw Exception("Unable to create user, provide an email")
             user.password = passwordEncoder.encode(signUpDTO.password)
             saveUser(user)
+            try {
+                emailService.sendRegistrationSuccess(user.email)
+            } catch (e: Exception) {
+                // праќањето мејл не смее да ја урне регистрацијата
+                println("Failed to send registration email: ${e.message}")
+            }
         } else {
             throw Exception("Unable to sign up")
         }
