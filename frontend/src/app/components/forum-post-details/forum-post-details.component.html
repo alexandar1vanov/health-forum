@@ -5,7 +5,16 @@
       <div class="forum-post">
         <div class="post-header">
           <div class="post-meta">
-            <span class="post-author">{{ post.user.email }}</span>
+            <div class="post-header-info">
+              <span class="post-author">{{ post.user.email }}</span>
+              <div class="post-header-right">
+                <p-rating
+                  [ngModel]="currentRating"
+                  (ngModelChange)="submitRating(post.id,$event)"
+                ></p-rating>
+                <span class="post-rating">{{ post.rating }}</span>
+              </div>
+            </div>
             <div class="time">
               <span class="post-time">{{ post.createdAt | date: 'dd.MM.yyyy' }}</span>
               <span class="post-time">{{ post.createdAt | date:'HH:mm' }}</span>

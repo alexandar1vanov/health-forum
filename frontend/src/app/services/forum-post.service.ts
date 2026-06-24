@@ -2,14 +2,14 @@ import {inject, Injectable, OnInit} from '@angular/core';
 import {AuthService} from './AuthService';
 import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, Observable, tap} from 'rxjs';
-import {ForumPost} from '../models/ForumPost';
+import {ForumPostResponse} from '../models/ForumPostResponse';
 import {CreateForum} from '../models/CreateForum';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ForumPostService implements OnInit {
-  private readonly url = 'http://localhost:8080/api/forum';
+  private readonly url = '/api/forum';
   private authService = inject(AuthService);
   http = inject(HttpClient);
 
@@ -18,22 +18,22 @@ export class ForumPostService implements OnInit {
   private postsRefreshSubject = new BehaviorSubject<boolean>(false);
   postsRefresh$ = this.postsRefreshSubject.asObservable()
 
-  private userPostsCache = new Map<number, ForumPost[]>()
+  private userPostsCache = new Map<number, ForumPostResponse[]>()
 
   ngOnInit(): void {
     this.currentUser = this.authService.getLoggedInUserId();
   }
 
-  getAllPosts(): Observable<ForumPost[]> {
-    return this.http.get<ForumPost[]>(`${this.url}`);
+  getAllPosts(): Observable<ForumPostResponse[]> {
+    return this.http.get<ForumPostResponse[]>(`${this.url}`);
   }
 
-  getPostById(postId: number): Observable<ForumPost> {
-    return this.http.get<ForumPost>(`${this.url}/post/${postId}`);
+  getPostById(postId: number): Observable<ForumPostResponse> {
+    return this.http.get<ForumPostResponse>(`${this.url}/post/${postId}`);
   }
 
-  getPostsByUserId(userId: number): Observable<ForumPost[]> {
-    return this.http.get<ForumPost[]>(`${this.url}/user/${userId}`)
+  getPostsByUserId(userId: number): Observable<ForumPostResponse[]> {
+    return this.http.get<ForumPostResponse[]>(`${this.url}/user/${userId}`)
       .pipe(
         tap(posts => {
           this.userPostsCache.set(userId, posts);
@@ -41,16 +41,16 @@ export class ForumPostService implements OnInit {
       );
   }
 
-  getPostsByDiseaseId(diseaseId: number): Observable<ForumPost[]> {
-    return this.http.get<ForumPost[]>(`${this.url}/disease/${diseaseId}`);
+  getPostsByDiseaseId(diseaseId: number): Observable<ForumPostResponse[]> {
+    return this.http.get<ForumPostResponse[]>(`${this.url}/disease/${diseaseId}`);
   }
 
-  getPostsByContent(content: string): Observable<ForumPost[]> {
-    return this.http.get<ForumPost[]>(`${this.url}/content/${content}`);
+  getPostsByContent(content: string): Observable<ForumPostResponse[]> {
+    return this.http.get<ForumPostResponse[]>(`${this.url}/content/${content}`);
   }
 
-  createForumPost(postData: CreateForum): Observable<ForumPost> {
-    return this.http.post<ForumPost>(`${this.url}`, postData)
+  createForumPost(postData: CreateForum): Observable<ForumPostResponse> {
+    return this.http.post<ForumPostResponse>(`${this.url}`, postData)
       .pipe(
         tap(() => {
             this.notifyPostsChanged()
@@ -69,8 +69,8 @@ export class ForumPostService implements OnInit {
       );
   }
 
-  updateForumPost(postId: number, postData: { title: string, content: string }): Observable<ForumPost> {
-    return this.http.put<ForumPost>(`${this.url}/post/${postId}`, postData)
+  updateForumPost(postId: number, postData: { title: string, content: string }): Observable<ForumPostResponse> {
+    return this.http.put<ForumPostResponse>(`${this.url}/post/${postId}`, postData)
       .pipe(
         tap((updatedPost) => {
           this.notifyPostsChanged()
@@ -83,11 +83,11 @@ export class ForumPostService implements OnInit {
     this.postsRefreshSubject.next(true)
   }
 
-  getCachedUserPosts(userId: number): ForumPost[] | null {
+  getCachedUserPosts(userId: number): ForumPostResponse[] | null {
     return this.userPostsCache.get(userId) || null;
   }
 
-  private updatePostInCache(updatedPost: ForumPost): void {
+  private updatePostInCache(updatedPost: ForumPostResponse): void {
     this.userPostsCache.forEach((posts, userId) => {
       const postIndex = posts.findIndex(post => post.id === updatedPost.id);
       if (postIndex !== -1) {

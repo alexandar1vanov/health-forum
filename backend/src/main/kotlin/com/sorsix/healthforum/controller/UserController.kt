@@ -1,6 +1,6 @@
 package com.sorsix.healthforum.controller
 
-import com.sorsix.healthforum.model.dto.auth_dtos.SignUpDTO
+import com.sorsix.healthforum.model.dto.response.SignUpDTO
 import com.sorsix.healthforum.model.dto.profile_response_dtos.ProfileResponse
 import com.sorsix.healthforum.model.dto.profile_response_dtos.UpdateProfileRequest
 import com.sorsix.healthforum.model.exceptions.UserNotFoundException
@@ -25,7 +25,7 @@ class UserController(
     val userDiseaseService: UserDiseaseService
 ) {
 
-    @PostMapping("/signup")
+    @PostMapping("/api/signup")
     fun signUp(@RequestBody @Valid signUpDTO: SignUpDTO): ResponseEntity<String> {
         try {
             userService.signUpUser(signUpDTO)

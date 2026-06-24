@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import {Router, RouterLink, RouterLinkActive} from '@angular/router';
-import { Disease } from '../../models/Disease';
+import { DiseaseResponse } from '../../models/DiseaseResponse';
 import { UserDiseaseService } from '../../services/UserDiseaseService';
 import { AuthService } from '../../services/AuthService';
 
@@ -20,7 +20,7 @@ export class SidebarComponent implements OnInit {
   authService = inject(AuthService);
   router = inject(Router);
 
-  diseasesByUser: Disease[] = [];
+  diseasesByUser: DiseaseResponse[] = [];
   isLoading: boolean = false;
   errorMessage: string | null = null;
 

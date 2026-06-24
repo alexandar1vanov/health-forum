@@ -1,9 +1,9 @@
 package com.sorsix.healthforum.service
 
 import com.sorsix.healthforum.model.Reply
-import com.sorsix.healthforum.model.dto.reply_dtos.ReplyDTO
-import com.sorsix.healthforum.model.dto.requests_dtos.replies.CreateReplyRequest
-import com.sorsix.healthforum.model.dto.requests_dtos.replies.UpdateReplyRequest
+import com.sorsix.healthforum.model.dto.response.ReplyDTO
+import com.sorsix.healthforum.model.dto.request.CreateReplyRequest
+import com.sorsix.healthforum.model.dto.request.UpdateReplyRequest
 
 interface ReplyService {
     fun getAllReplies(): List<Reply>

@@ -1,19 +1,19 @@
 package com.sorsix.healthforum.service
 
 import com.sorsix.healthforum.model.User
-import com.sorsix.healthforum.model.dto.admin_dtos.AdminUserUpdateDTO
-import com.sorsix.healthforum.model.dto.auth_dtos.SignUpDTO
+import com.sorsix.healthforum.model.dto.request.AdminUserUpdateDTO
+import com.sorsix.healthforum.model.dto.response.SignUpDTO
+import com.sorsix.healthforum.model.dto.response.UserPanelDTO
 import com.sorsix.healthforum.model.dto.profile_response_dtos.ProfileResponse
 import com.sorsix.healthforum.model.dto.profile_response_dtos.UpdateProfileRequest
 import com.sorsix.healthforum.model.dto.profile_response_dtos.toProfileResponse
-import com.sorsix.healthforum.model.dto.users_dtos.UserPanelDTO
 import com.sorsix.healthforum.model.exceptions.UserNotFoundException
+import com.sorsix.healthforum.model.extensions.toUserPanelDTO
 import com.sorsix.healthforum.repository.UserDiseaseRepository
 import com.sorsix.healthforum.repository.UserRepository
 import jakarta.transaction.Transactional
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
-import toUserPanelDTO
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 

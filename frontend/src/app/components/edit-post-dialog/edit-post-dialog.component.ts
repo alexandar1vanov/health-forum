@@ -7,7 +7,7 @@ import {
   MatDialogRef,
   MatDialogTitle
 } from '@angular/material/dialog';
-import {ForumPost} from '../../models/ForumPost';
+import {ForumPostResponse} from '../../models/ForumPostResponse';
 import {MatError, MatFormField, MatInput, MatLabel} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatButton} from '@angular/material/button';
@@ -49,7 +49,7 @@ export class EditPostDialogComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<EditPostDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { post: ForumPost },
+    @Inject(MAT_DIALOG_DATA) public data: { post: ForumPostResponse },
     private geminiService: GeminiAiService,
     private snackBar: MatSnackBar
   ) {

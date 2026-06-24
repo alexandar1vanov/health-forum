@@ -9,8 +9,8 @@ import {ProfileResponse} from '../models/ProfileResponse';
   providedIn: 'root',
 })
 export class UserService {
-  private readonly apiUserUrl = 'http://localhost:8080/api/admin'
-  private readonly apiProfileUrl = 'http://localhost:8080/api/profile'
+  private readonly apiUserUrl = '/api/admin'
+  private readonly apiProfileUrl = '/api/profile'
 
   http = inject(HttpClient)
 

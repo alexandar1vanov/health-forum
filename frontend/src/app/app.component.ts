@@ -9,4 +9,5 @@ import { RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
   title = 'health-forum-ng';
+  hoveredRating = new Map<number, number>();
 }

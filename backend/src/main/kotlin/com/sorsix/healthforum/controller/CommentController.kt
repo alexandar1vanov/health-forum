@@ -1,9 +1,9 @@
 package com.sorsix.healthforum.controller
 
 import com.sorsix.healthforum.model.Comment
-import com.sorsix.healthforum.model.dto.comment_dtos.CommentDTO
-import com.sorsix.healthforum.model.dto.requests_dtos.comments.CreateCommentRequest
-import com.sorsix.healthforum.model.dto.requests_dtos.comments.UpdateCommentRequest
+import com.sorsix.healthforum.model.dto.response.CommentDTO
+import com.sorsix.healthforum.model.dto.request.CreateCommentRequest
+import com.sorsix.healthforum.model.dto.request.UpdateCommentRequest
 import com.sorsix.healthforum.service.CommentService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus

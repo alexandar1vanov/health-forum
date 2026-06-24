@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Disease } from '../../models/Disease';
+import { DiseaseResponse } from '../../models/DiseaseResponse';
 import { ForumPostService } from '../../services/forum-post.service';
 import { AuthService } from '../../services/AuthService';
 import { DiseaseService } from '../../services/DiseaseService';
@@ -32,11 +32,11 @@ export class CreateForumComponent implements OnInit {
   private snackBar = inject(MatSnackBar);
 
   createForumPostForm!: FormGroup;
-  allDiseases: Disease[] = [];
+  allDiseases: DiseaseResponse[] = [];
   isSubmitted: boolean = false;
   errorMessage: string = '';
   searchTerm: string = '';
-  filteredDiseases: Disease[] = [];
+  filteredDiseases: DiseaseResponse[] = [];
   selectedDiseaseIds: number[] = [];
 
   isCheckingSpam: boolean = false;

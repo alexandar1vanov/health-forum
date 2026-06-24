@@ -35,7 +35,7 @@
   align-items: center;
   gap: 20px;
   padding: 30px;
-  background: linear-gradient(135deg, #4a90d9, #357ab8);
+  background: linear-gradient(135deg, #34d9a8, #23b287);
   color: #fff;
 }
 
@@ -93,7 +93,7 @@
 
 .disease-tag {
   background: #e8f1fb;
-  color: #357ab8;
+  color: #34d9a8;
   padding: 4px 12px;
   border-radius: 999px;
   font-size: 0.85rem;
@@ -138,7 +138,7 @@
 }
 
 .btn-primary {
-  background: #357ab8;
+  background: #34d9a8;
   color: #fff;
 }
 
@@ -198,8 +198,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #e8f1fb;
-  color: #357ab8;
+  color: #34dba9;
   padding: 8px 14px;
   border-radius: 8px;
   font-size: 0.9rem;

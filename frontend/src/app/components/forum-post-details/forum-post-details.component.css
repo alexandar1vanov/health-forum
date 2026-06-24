@@ -49,7 +49,6 @@ app-user-posts {
 
 
 .post-header {
-  display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 16px 20px;
@@ -59,6 +58,7 @@ app-user-posts {
 
 .post-meta {
   display: flex;
+  width: 100%;
   flex-direction: column;
 }
 
@@ -79,6 +79,21 @@ app-user-posts {
 app-comment-section {
   z-index: 1;
 }
+.post-rating {
+  font-weight: 600;
+  color: #ffa000;
+}
+
+.post-header-info {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.post-header-right {
+  display: flex;
+  gap: 1rem;
+}
 
 .post-time {
   font-size: 12px;
@@ -88,6 +103,7 @@ app-comment-section {
 
 .disease-tags {
   display: flex;
+  justify-content: end;
   flex-wrap: wrap;
   gap: 8px;
   align-items: center;

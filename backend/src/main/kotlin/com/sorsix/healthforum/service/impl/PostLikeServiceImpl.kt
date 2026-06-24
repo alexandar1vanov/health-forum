@@ -1,8 +1,8 @@
 package com.sorsix.healthforum.service.impl
 
 import com.sorsix.healthforum.model.PostLike
-import com.sorsix.healthforum.model.dto.post_like_dtos.PostLikeCountDTO
-import com.sorsix.healthforum.model.dto.post_like_dtos.PostLikeDTO
+import com.sorsix.healthforum.model.dto.response.PostLikeCountDTO
+import com.sorsix.healthforum.model.dto.response.PostLikeDTO
 import com.sorsix.healthforum.repository.ForumPostRepository
 import com.sorsix.healthforum.repository.PostLikeRepository
 import com.sorsix.healthforum.repository.UserRepository

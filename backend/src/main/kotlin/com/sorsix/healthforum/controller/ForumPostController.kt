@@ -1,8 +1,9 @@
 package com.sorsix.healthforum.controller
 
 import com.sorsix.healthforum.model.ForumPost
-import com.sorsix.healthforum.model.dto.requests_dtos.forums.CreateForumRequest
-import com.sorsix.healthforum.model.dto.requests_dtos.forums.UpdateForumRequest
+import com.sorsix.healthforum.model.dto.response.ForumPostDTO
+import com.sorsix.healthforum.model.dto.request.CreateForumRequest
+import com.sorsix.healthforum.model.dto.request.UpdateForumRequest
 import com.sorsix.healthforum.service.ForumPostService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -15,7 +16,7 @@ class ForumPostController(
     private val forumPostService: ForumPostService
 ) {
     @GetMapping
-    fun getAllForumPosts(): ResponseEntity<List<ForumPost>> {
+    fun getAllForumPosts(): ResponseEntity<List<ForumPostDTO>> {
         return ResponseEntity(forumPostService.getAllForumPosts(), HttpStatus.OK)
     }
 
@@ -43,17 +44,17 @@ class ForumPostController(
     }
 
     @GetMapping("/post/{postId}")
-    fun getForumPostById(@PathVariable postId: Long): ResponseEntity<ForumPost?> {
-        return ResponseEntity(forumPostService.getByForumPostId(postId), HttpStatus.OK)
+    fun getForumPostById(@PathVariable postId: Long): ResponseEntity<ForumPostDTO?> {
+        return ResponseEntity(forumPostService.getById(postId), HttpStatus.OK)
     }
 
     @GetMapping("/disease/{diseaseId}")
-    fun getForumPostByDiseaseId(@PathVariable diseaseId: Long): ResponseEntity<List<ForumPost>> {
+    fun getForumPostByDiseaseId(@PathVariable diseaseId: Long): ResponseEntity<List<ForumPostDTO>> {
         return ResponseEntity(forumPostService.getAllPostByDiseaseId(diseaseId), HttpStatus.OK)
     }
 
     @GetMapping("/content/{content}")
-    fun getForumPostByContent(@PathVariable content: String): ResponseEntity<List<ForumPost>> {
+    fun getForumPostByContent(@PathVariable content: String): ResponseEntity<List<ForumPostDTO>> {
         return ResponseEntity(forumPostService.findPostsByContent(content), HttpStatus.OK)
     }
 

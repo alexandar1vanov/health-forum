@@ -3,7 +3,7 @@ package com.sorsix.healthforum.config
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.gson.Gson
 import com.sorsix.healthforum.model.User
-import com.sorsix.healthforum.model.dto.auth_dtos.LoginDTO
+import com.sorsix.healthforum.model.dto.response.LoginDTO
 import com.sorsix.healthforum.repository.UserRepository
 import com.sorsix.healthforum.response.TokenResponse
 import com.sorsix.healthforum.security.UserSecurity
@@ -23,6 +23,10 @@ class JWTAuthenticationFilter(
     private val authManager: AuthenticationManager,
     private val userRepository: UserRepository
 ) : UsernamePasswordAuthenticationFilter() {
+
+    init {
+        setFilterProcessesUrl("/api/login")
+    }
 
     override fun attemptAuthentication(
         request: HttpServletRequest?,

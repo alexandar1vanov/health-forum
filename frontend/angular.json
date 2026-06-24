@@ -28,6 +28,7 @@
             ],
             "styles": [
               "@angular/material/prebuilt-themes/cyan-orange.css",
+              "node_modules/ngx-toastr/toastr.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -66,7 +67,10 @@
               "buildTarget": "health-forum-ng:build:development"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "development",
+          "options": {
+            "proxyConfig": "proxy.conf.json"
+          }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n"

@@ -6,7 +6,7 @@ import {UserDiseaseService} from '../../services/UserDiseaseService';
 import {DiseaseService} from '../../services/DiseaseService';
 import {AuthService} from '../../services/AuthService';
 import {ProfileResponse} from '../../models/ProfileResponse';
-import {Disease} from '../../models/Disease';
+import {DiseaseResponse} from '../../models/DiseaseResponse';
 import {SidebarComponent} from '../sidebar/sidebar.component';
 
 @Component({
@@ -24,8 +24,8 @@ export class ProfileComponent implements OnInit {
   private authService = inject(AuthService);
 
   profile: ProfileResponse | null = null;
-  userDiseases: Disease[] = [];
-  allDiseases: Disease[] = [];
+  userDiseases: DiseaseResponse[] = [];
+  allDiseases: DiseaseResponse[] = [];
 
   isLoading = false;
   errorMessage: string | null = null;
@@ -97,7 +97,7 @@ export class ProfileComponent implements OnInit {
   }
 
   // ---- add / delete болест ----
-  get availableDiseases(): Disease[] {
+  get availableDiseases(): DiseaseResponse[] {
     const ownedIds = this.userDiseases.map(d => d.id);
     return this.allDiseases.filter(d => !ownedIds.includes(d.id));
   }

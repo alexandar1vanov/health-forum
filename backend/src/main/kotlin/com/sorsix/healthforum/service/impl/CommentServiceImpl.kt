@@ -1,10 +1,11 @@
 package com.sorsix.healthforum.service.impl
 
 import com.sorsix.healthforum.model.Comment
-import com.sorsix.healthforum.model.dto.comment_dtos.CommentDTO
-import com.sorsix.healthforum.model.dto.requests_dtos.comments.CreateCommentRequest
-import com.sorsix.healthforum.model.dto.requests_dtos.comments.UpdateCommentRequest
+import com.sorsix.healthforum.model.dto.response.CommentDTO
+import com.sorsix.healthforum.model.dto.request.CreateCommentRequest
+import com.sorsix.healthforum.model.dto.request.UpdateCommentRequest
 import com.sorsix.healthforum.model.exceptions.CommentNotFoundException
+import com.sorsix.healthforum.model.extensions.toCommentDTO
 import com.sorsix.healthforum.repository.CommentRepository
 import com.sorsix.healthforum.repository.ReplyRepository
 import com.sorsix.healthforum.service.CommentService
@@ -12,7 +13,6 @@ import com.sorsix.healthforum.service.ForumPostService
 import com.sorsix.healthforum.service.UserService
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
-import toCommentDTO
 
 @Service
 class CommentServiceImpl(

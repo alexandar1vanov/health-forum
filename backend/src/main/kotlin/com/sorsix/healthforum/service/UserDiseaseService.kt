@@ -1,9 +1,9 @@
 package com.sorsix.healthforum.service
 
 import com.sorsix.healthforum.model.UserDisease
-import com.sorsix.healthforum.model.dto.user_disease_dtos.UserDiseaseDetailsDTO
-import com.sorsix.healthforum.model.dto.disease_dtos.DiseasesDTO
-import com.sorsix.healthforum.model.dto.users_dtos.UsersDTO
+import com.sorsix.healthforum.model.dto.response.UserDiseaseDetailsDTO
+import com.sorsix.healthforum.model.dto.response.DiseasesDTO
+import com.sorsix.healthforum.model.dto.response.UsersDTO
 
 interface UserDiseaseService {
 

@@ -8,7 +8,7 @@ import {AuthService} from './AuthService';
   providedIn: 'root'
 })
 export class CommentService implements OnInit {
-  private readonly url = 'http://localhost:8080/api/comments';
+  private readonly url = '/api/comments';
   http = inject(HttpClient);
   authService = inject(AuthService);
 

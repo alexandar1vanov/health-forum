@@ -51,3 +51,9 @@ kotlin {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+// Cap the heap of the app when running locally via `gradle bootRun`.
+// Without this the JVM defaults to reserving ~25% of total host RAM for the heap.
+tasks.named<org.springframework.boot.gradle.tasks.run.BootRun>("bootRun") {
+    jvmArgs = listOf("-Xmx512m", "-XX:MaxMetaspaceSize=256m")
+}
