@@ -1,9 +1,11 @@
 package com.sorsix.healthforum.controller
 
+import com.sorsix.healthforum.model.dto.request.EmailDTO
 import com.sorsix.healthforum.model.dto.response.SignUpDTO
 import com.sorsix.healthforum.model.dto.profile_response_dtos.ProfileResponse
 import com.sorsix.healthforum.model.dto.profile_response_dtos.UpdateProfileRequest
 import com.sorsix.healthforum.model.exceptions.UserNotFoundException
+import com.sorsix.healthforum.model.exceptions.VerificationException
 import com.sorsix.healthforum.service.UserDiseaseService
 import com.sorsix.healthforum.service.UserService
 import jakarta.validation.Valid
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import kotlin.jvm.optionals.getOrNull
 
@@ -33,6 +36,23 @@ class UserController(
             return ResponseEntity(e.message, HttpStatus.CONFLICT)
         }
         return ResponseEntity("Created", HttpStatus.CREATED)
+    }
+
+    @GetMapping("/api/verify-email")
+    fun verifyEmail(@RequestParam token: String): ResponseEntity<String> {
+        return try {
+            userService.verifyEmail(token)
+            ResponseEntity.ok("Verified")
+        } catch (e: VerificationException) {
+            ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
+        }
+    }
+
+    @PostMapping("/api/resend-verification")
+    fun resendVerification(@RequestBody @Valid body: EmailDTO): ResponseEntity<String> {
+        body.email?.let { userService.resendVerification(it) }
+        // always 200 so we don't leak which emails are registered
+        return ResponseEntity.ok("If the account exists and is unverified, a new email has been sent.")
     }
 
     @GetMapping("/api/profile")

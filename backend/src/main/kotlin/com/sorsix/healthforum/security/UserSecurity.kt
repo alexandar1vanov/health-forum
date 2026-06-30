@@ -10,6 +10,7 @@ class UserSecurity(
     val email: String,
     private val password: String,
     val role: Role,
+    private val verified: Boolean = true,
 ) : UserDetails {
 
     override fun getAuthorities() : MutableCollection<out GrantedAuthority> {
@@ -23,5 +24,5 @@ class UserSecurity(
     override fun isAccountNonExpired() = true
     override fun isAccountNonLocked() = true
     override fun isCredentialsNonExpired() = true
-    override fun isEnabled() = true
+    override fun isEnabled() = verified
 }

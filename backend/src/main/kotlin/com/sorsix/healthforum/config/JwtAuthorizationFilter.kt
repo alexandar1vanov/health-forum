@@ -18,8 +18,13 @@ class JwtAuthorizationFilter(
     private fun getAuthentication(token: String): UsernamePasswordAuthenticationToken? {
         if (!jwtTokenUtil.isTokenValid(token)) return null
         val email = jwtTokenUtil.getEmail(token)
-        val user = service.loadUserByUsername(email)
-        return UsernamePasswordAuthenticationToken(user, null, user.authorities)
+        return try {
+            val user = service.loadUserByUsername(email)
+            UsernamePasswordAuthenticationToken(user, null, user.authorities)
+        } catch (_: Exception) {
+            // token references a user that no longer exists -> treat as unauthenticated
+            null
+        }
     }
 
     override fun doFilterInternal(

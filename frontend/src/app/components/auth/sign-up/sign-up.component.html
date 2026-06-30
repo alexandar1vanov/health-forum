@@ -1,5 +1,23 @@
 <div class="container">
   <div class="form-container">
+    @if (registered) {
+      <h1 class="signup-title">Check your inbox</h1>
+      <p class="subtitle">
+        We sent a confirmation link to <strong>{{ registeredEmail }}</strong>.
+        Click it to activate your account, then log in.
+      </p>
+      <button type="button" class="btn-signup" (click)="resendEmail()">
+        Resend email
+      </button>
+      @if (resendMessage) {
+        <div class="error-message">
+          <p>{{ resendMessage }}</p>
+        </div>
+      }
+      <div class="login-link">
+        Already confirmed? <a routerLink="/login" routerLinkActive="active">Log in</a>
+      </div>
+    } @else {
     <h1 class="signup-title">Sign Up</h1>
     <p class="subtitle">Join our Health-Forum community today!</p>
     <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
@@ -61,5 +79,6 @@
     <div class="login-link">
       Already have an account? <a routerLink="/login" routerLinkActive="active">Log in</a>
     </div>
+    }
   </div>
 </div>

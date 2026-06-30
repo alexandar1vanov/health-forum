@@ -24,6 +24,9 @@ export class SignUpComponent {
 
   isLoading = false;
   errorMessage: string | null = null;
+  registered = false;
+  registeredEmail = '';
+  resendMessage: string | null = null;
 
   signupForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -50,13 +53,29 @@ export class SignUpComponent {
     this.authService.registerUser(signupData).subscribe({
       next: () => {
         this.isLoading = false;
-        this.router.navigate(['/login']);
+        this.registered = true;
+        this.registeredEmail = signupData.email;
         console.log("Registration successful");
       },
       error: (error) => {
         this.isLoading = false;
         this.errorMessage = error.error?.message || 'Registration failed. Please try again.';
         console.error('Registration error:', error);
+      }
+    });
+  }
+
+  resendEmail(): void {
+    if (!this.registeredEmail) {
+      return;
+    }
+    this.resendMessage = null;
+    this.authService.resendVerification(this.registeredEmail).subscribe({
+      next: () => {
+        this.resendMessage = 'A new confirmation email has been sent.';
+      },
+      error: () => {
+        this.resendMessage = 'Could not resend the email. Please try again later.';
       }
     });
   }

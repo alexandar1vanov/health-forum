@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import {LoginComponent} from './components/auth/login/login.component';
 import {SignUpComponent} from './components/auth/sign-up/sign-up.component';
+import {VerifyEmailComponent} from './components/auth/verify-email/verify-email.component';
 import {HomepageComponent} from './components/homepage/homepage.component';
 import {SelectDiseasesComponent} from './components/select-diseases/select-diseases.component';
 import {CreateForumComponent} from './components/create-forum/create-forum.component';
@@ -16,6 +17,8 @@ export const routes: Routes = [
   {path: 'login', component: LoginComponent},
 
   {path: 'signup', component: SignUpComponent},
+
+  {path: 'verify-email', component: VerifyEmailComponent},
 
   {path: 'home', component: HomepageComponent, canActivate: [AuthGuard]},
 

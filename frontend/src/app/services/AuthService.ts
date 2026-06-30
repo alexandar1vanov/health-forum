@@ -66,6 +66,17 @@ export class AuthService {
     return this.http.post(`${this.url}/signup`, user, {responseType: "text"});
   }
 
+  verifyEmail(token: string) {
+    return this.http.get(`${this.url}/verify-email`, {
+      params: { token },
+      responseType: "text"
+    });
+  }
+
+  resendVerification(email: string) {
+    return this.http.post(`${this.url}/resend-verification`, { email }, {responseType: "text"});
+  }
+
   logout(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('hasSelectedDiseases');

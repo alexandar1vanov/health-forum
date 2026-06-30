@@ -56,7 +56,7 @@ class SecurityConfig(
             .sessionManagement { sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .csrf { csrf -> csrf.disable() }
             .authorizeHttpRequests { auth ->
-                auth.requestMatchers("/api/signup").permitAll()
+                auth.requestMatchers("/api/signup", "/api/verify-email", "/api/resend-verification").permitAll()
                     .anyRequest().authenticated()
             }
         return http.build()
