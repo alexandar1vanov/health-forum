@@ -36,6 +36,9 @@ data class User(
     @Column(name = "has_selected_diseases", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
     var hasSelectedDiseases: Boolean = false,
 
+    @Column(name = "is_verified", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
+    var isVerified: Boolean = false,
+
     @CreationTimestamp
     val createdAt: Date? = null,
 

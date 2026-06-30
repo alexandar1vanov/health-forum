@@ -7,14 +7,21 @@ import com.sorsix.healthforum.model.dto.response.UserPanelDTO
 import com.sorsix.healthforum.model.dto.profile_response_dtos.ProfileResponse
 import com.sorsix.healthforum.model.dto.profile_response_dtos.UpdateProfileRequest
 import com.sorsix.healthforum.model.dto.profile_response_dtos.toProfileResponse
+import com.sorsix.healthforum.model.EmailVerificationToken
 import com.sorsix.healthforum.model.exceptions.UserNotFoundException
+import com.sorsix.healthforum.model.exceptions.VerificationException
 import com.sorsix.healthforum.model.extensions.toUserPanelDTO
+import com.sorsix.healthforum.repository.EmailVerificationTokenRepository
 import com.sorsix.healthforum.repository.UserDiseaseRepository
 import com.sorsix.healthforum.repository.UserRepository
 import jakarta.transaction.Transactional
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 import java.util.Optional
+import java.util.UUID
 import kotlin.jvm.optionals.getOrNull
 
 @Service
@@ -22,7 +29,9 @@ class UserService(
     private val userRepository: UserRepository,
     private val userDiseaseRepository: UserDiseaseRepository,
     private val emailService: EmailService,
-    val passwordEncoder: BCryptPasswordEncoder
+    private val verificationTokenRepository: EmailVerificationTokenRepository,
+    val passwordEncoder: BCryptPasswordEncoder,
+    @Value("\${health_forum.frontend.url}") private val frontendUrl: String
 ) {
     fun getProfile(id: Long): ProfileResponse {
         val user = getUserById(id)
@@ -65,16 +74,60 @@ class UserService(
             val user = User()
             user.email = signUpDTO.email ?: throw Exception("Unable to create user, provide an email")
             user.password = passwordEncoder.encode(signUpDTO.password)
-            saveUser(user)
-            try {
-                emailService.sendRegistrationSuccess(user.email)
-            } catch (e: Exception) {
-                // праќањето мејл не смее да ја урне регистрацијата
-                println("Failed to send registration email: ${e.message}")
-            }
+            user.isVerified = false
+            val savedUser = saveUser(user)
+            sendVerificationToken(savedUser)
         } else {
             throw Exception("Unable to sign up")
         }
+    }
+
+    private fun sendVerificationToken(user: User) {
+        val verificationToken = EmailVerificationToken(
+            token = UUID.randomUUID().toString(),
+            user = user,
+            expiresAt = Instant.now().plus(24, ChronoUnit.HOURS),
+            used = false
+        )
+        verificationTokenRepository.save(verificationToken)
+        try {
+            val link = "$frontendUrl/verify-email?token=${verificationToken.token}"
+            emailService.sendVerificationEmail(user.email, link)
+        } catch (e: Exception) {
+            // праќањето мејл не смее да ја урне регистрацијата
+            println("Failed to send verification email: ${e.message}")
+        }
+    }
+
+    @Transactional
+    fun verifyEmail(token: String) {
+        val verificationToken = verificationTokenRepository.findByToken(token).getOrNull()
+            ?: throw VerificationException.invalidToken()
+        if (verificationToken.used) throw VerificationException.alreadyUsed()
+        if (verificationToken.expiresAt.isBefore(Instant.now())) throw VerificationException.expired()
+
+        val user = verificationToken.user ?: throw VerificationException.invalidToken()
+        user.isVerified = true
+        userRepository.save(user)
+        verificationToken.used = true
+        verificationTokenRepository.save(verificationToken)
+
+        try {
+            emailService.sendRegistrationSuccess(user.email)
+        } catch (e: Exception) {
+            println("Failed to send registration success email: ${e.message}")
+        }
+    }
+
+    @Transactional
+    fun resendVerification(email: String) {
+        val user = getUserByEmail(email).getOrNull() ?: return
+        if (user.isVerified) return
+        verificationTokenRepository.findByUserAndUsedFalse(user).forEach {
+            it.used = true
+            verificationTokenRepository.save(it)
+        }
+        sendVerificationToken(user)
     }
 
     @Transactional

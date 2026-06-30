@@ -12,6 +12,7 @@ import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.DisabledException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.AuthenticationException
@@ -70,16 +71,20 @@ class JWTAuthenticationFilter(
         response: HttpServletResponse?,
         failed: AuthenticationException?
     ) {
-        val error = InvalidCredentialsError()
+        val error = if (failed is DisabledException) {
+            AuthenticationError(status = 403, message = "Please verify your email before logging in.")
+        } else {
+            AuthenticationError(status = 401, message = "Please check your email/password")
+        }
         response?.status = error.status
         response?.contentType = "application/json"
         response?.writer?.append(error.toString())
     }
 
-    private data class InvalidCredentialsError(
-        val timestamp: Long = Date().time,
-        val status: Int = 401,
-        val message: String = "Please check your email/password"
+    private data class AuthenticationError(
+        val status: Int,
+        val message: String,
+        val timestamp: Long = Date().time
     ) {
         override fun toString(): String {
             return ObjectMapper().writeValueAsString(this)

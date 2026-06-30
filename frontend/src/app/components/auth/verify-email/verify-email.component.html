@@ -1,0 +1,18 @@
+<div class="container">
+  <div class="form-container">
+    @if (status === 'loading') {
+      <h1 class="signup-title">Verifying...</h1>
+      <p class="subtitle">Please wait while we confirm your email.</p>
+    } @else if (status === 'success') {
+      <h1 class="signup-title">Email verified</h1>
+      <p class="subtitle">Your account is now active. You can log in.</p>
+      <a class="btn-signup" routerLink="/login">Go to Login</a>
+    } @else {
+      <h1 class="signup-title">Verification failed</h1>
+      <p class="subtitle">{{ errorMessage }}</p>
+      <div class="login-link">
+        <a routerLink="/signup">Back to Sign Up</a>
+      </div>
+    }
+  </div>
+</div>

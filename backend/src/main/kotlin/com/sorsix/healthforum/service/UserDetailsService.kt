@@ -21,7 +21,8 @@ class UserDetailsService(
                 it,
                 user.email,
                 user.password,
-                user.role
+                user.role,
+                user.isVerified
             )
         } ?: run {
             throw Exception("User not found")
