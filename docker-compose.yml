@@ -32,6 +32,12 @@ services:
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
       HEALTH_FORUM_JWT_SECRET: ${JWT_SECRET}
       SERVER_PORT: 8080
+      # URL used to build the verification link sent by email — must be reachable by the end user
+      HEALTH_FORUM_FRONTEND_URL: ${FRONTEND_URL:-http://localhost}
+      HEALTH_FORUM_CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost}
+      # SMTP / email verification
+      SPRING_MAIL_USERNAME: ${MAIL_USERNAME}
+      SPRING_MAIL_PASSWORD: ${MAIL_APP_PASSWORD}
     ports:
       - "8080:8080"
     depends_on:

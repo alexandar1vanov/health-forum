@@ -2,6 +2,7 @@ package com.sorsix.healthforum.config
 
 import com.sorsix.healthforum.repository.UserRepository
 import com.sorsix.healthforum.utility.JWTUtility
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
@@ -23,7 +24,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 class SecurityConfig(
     private val jwtUtility: JWTUtility,
     private val userDetailsService: UserDetailsService,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    @Value("\${health_forum.cors.allowed-origins}") private val allowedOrigins: String
 ) {
     private fun authManager(http: HttpSecurity): AuthenticationManager {
         val authenticationManagerBuilder =
@@ -37,7 +39,7 @@ class SecurityConfig(
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
         val configuration = CorsConfiguration()
-        configuration.allowedOrigins = listOf("http://localhost:4200")
+        configuration.allowedOrigins = allowedOrigins.split(",").map { it.trim() }
         configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
         configuration.allowedHeaders = listOf("*")
         configuration.allowCredentials = true
